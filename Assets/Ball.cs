@@ -2,26 +2,22 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
-    private float _speed = -40f;
+    public float _speed;
     private Rigidbody2D _rb2d;
-    private Vector2 _direction;
 
     private void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
-        _direction = new Vector2(-1, -1);
+        StartBall();
     }
-
-    void FixedUpdate()
+    void StartBall()
     {
-        _rb2d.velocity = _direction * 5f; 
-    }
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        //if (collision.gameObject.CompareTag("Platform"))
-        //{
-            _direction = -_direction; // »змен€ем направление движени€ на противоположное
-        //}
-
+        float x = Random.Range(0, 2) == 0 
+            ? -1 
+            : 1;
+        float y = Random.Range(0, 2) == 0 
+            ? -1 
+            : 1;
+        _rb2d.velocity = new Vector2(_speed * x, _speed * y);
     }
 }
