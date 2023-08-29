@@ -1,13 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AI_Platform : MonoBehaviour
 {
-    public Transform target; // Целевой объект, за которым нужно следить
+    public Transform _target; // Целевой объект, за которым нужно следить
     public MiddleZone _middleZone;
     private Vector3 _startPosition;
-
+    public float _speed;
     private void Awake()
     {
         _middleZone = GameObject.FindFirstObjectByType<MiddleZone>();
@@ -15,20 +13,25 @@ public class AI_Platform : MonoBehaviour
     private void Start()
     {
         _startPosition = new Vector3 (0,5);
+        transform.position = _startPosition;
     }
     void Update()
     {
-        Vector3 newPosition = transform.position; // Получаем текущую позицию объекта, который должен следить
+        Vector3 _newPosition = transform.position; // Получаем текущую позицию объекта, который должен следить
+        Vector3 _currentPosition = transform.position;
+        _currentPosition.x = _target.position.x;
+
 
         if (_middleZone._objectTransform != null)
         {
-            newPosition.x = target.position.x; // Устанавливаем новое значение только для X позиции, чтобы сохранить Y и Z значения
-
-            transform.position = newPosition; // Устанавливаем новую позицию объекта, который должен следить
+            _newPosition = Vector3.MoveTowards(transform.position, _currentPosition, _speed * Time.deltaTime);
+            transform.position = _newPosition; // Устанавливаем новую позицию объекта, который должен следить
         }
         else if (_middleZone._objectTransform == null)
         {
-            transform.position = Vector3.Lerp(_startPosition, newPosition, 0);
+            _newPosition = Vector3.MoveTowards(transform.position, _startPosition, _speed * Time.deltaTime);
+
+            transform.position = _newPosition;
         }
     }
 }
